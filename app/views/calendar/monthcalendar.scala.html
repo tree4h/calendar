@@ -1,0 +1,22 @@
+@(cal : models.view.MonthView)
+@import models.view.DayView
+
+<table>
+	<caption>@cal.month.get英名()</caption>
+	<tr class="dow">
+		<td width="30" class="sun">日</td>
+		<td width="30">月</td>
+		<td width="30">火</td>
+		<td width="30">水</td>
+		<td width="30">木</td>
+		<td width="30">金</td>
+		<td width="30" class="sat">土</td>
+	</tr>
+	@for(i <- 1 to 6) {
+		<tr>
+		@for(j <- 1 to 7) {
+			<td class="@cal.getDayView(i, j).className" title="@cal.getDayView(i,j).name">@cal.getDayView(i, j).day</td>
+		}
+		</tr>
+	}
+</table>

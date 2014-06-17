@@ -1,0 +1,48 @@
+
+@import helper._
+
+@implicitFieldConstructor = @{ FieldConstructor(bootstrapInput.f) }
+
+@main("カレンダ作成") {
+	<ul class="breadcrumb">
+		<li><a href="/calendarlist">カレンダ一覧</a></li>
+		<li class="active">新規</li>
+	</ul>
+
+	@form(routes.CalendarRestFacade.createCalendar(), 'class -> "form-horizontal") {
+		<div class="form-group">
+			<label class="col-sm-2 control-label">カレンダ名(所有者名)</label>
+			<div class="col-sm-5">
+				<input type="text" class="form-control" name="owner" required>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">年度</label>
+			<div class="col-sm-5">
+				<input type="text" class="form-control" name="year" placeholder="YYYY" required>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">休日規則(祝日＋土日)</label>
+			<div class="col-sm-5">
+				<input type="checkbox" name="holiday">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">休日規則</label>
+			<div class="col-sm-5">
+				<textarea rows="10" class="form-control" name="ownerRule" title='{"type":"不稼働", "name":"三が日", "month":"M1", "day":"D1-D3", "dow":"*"},{"type":"休出", "name":"成人の日", "month":"M1", "day":"D8-D14", "dow":"月"}'>
+				</textarea>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				<button type="submit" class="btn btn-primary">実行</button>
+			</div>
+		</div>
+	}
+
+}

@@ -1,0 +1,14 @@
+
+@main("カレンダAPI一覧") {
+	<ul class="breadcrumb">
+		<li><a href="/calendarapi">カレンダAPI一覧</a></li>
+	</ul>
+
+	<ul>
+		<li>
+			<a href="@routes.CalendarRestFacade.viewAPI1InputForm()">getNextWorkingDate(所有者)</a>
+			<span> : カレンダ所有者を指定して、現在日における次の稼働日を返す</span>
+		</li>
+		<li><a href="">getPrevWorkingDate(所有者)</a></li>
+	</ul>
+}

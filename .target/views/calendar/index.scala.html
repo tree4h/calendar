@@ -1,0 +1,15 @@
+@(calendars : List[models.calendar.カレンダ年])
+
+@main("カレンダ一覧") {
+	<ul class="breadcrumb">
+		<li><a href="/calendarlist">カレンダ一覧</a></li>
+	</ul>
+
+	<a class="btn" href="@routes.CalendarRestFacade.viewInputForm()">新規</a>
+	<br>
+	<ul>
+	@for(cal <- calendars) {
+		<li><a href="@routes.CalendarRestFacade.viewCalendar(cal.id)">@cal.owner.name _ @cal.year</a></li>
+	}
+	</ul>
+}

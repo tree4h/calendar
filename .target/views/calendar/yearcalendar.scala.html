@@ -1,0 +1,55 @@
+@(title : String)(yearcalendar : List[models.view.MonthView])
+
+@main("カレンダ一覧") {
+	<ul class="breadcrumb">
+		<li><a href="/calendarlist">カレンダ一覧</a></li>
+		<li class="active">@title</li>
+	</ul>
+
+ 	<link rel="stylesheet" media="screen" href="@routes.Assets.at("css/calendar.css")">
+
+		<div class="row">
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(0))
+			</div>
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(1))
+			</div>
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(2))
+			</div>
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(3))
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(4))
+			</div>
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(5))
+			</div>
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(6))
+			</div>
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(7))
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(8))
+			</div>
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(9))
+			</div>
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(10))
+			</div>
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(11))
+			</div>
+		</div>
+}
