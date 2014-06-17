@@ -5,11 +5,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import models.calendar.カレンダDomainUtil;
-import models.calendar.カレンダ年;
-import models.calendar.休日;
-import models.calendar.月;
-import models.party.所有者;
+import models.calendar.CalendarDomainUtil;
+import models.calendar.CalendarYear;
+import models.calendar.Holiday;
+import models.calendar.Month;
+import models.party.Owner;
 import models.view.MonthView;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -28,7 +28,7 @@ public class CalendarRestFacade extends Controller {
 	private static final String 定休 = "{\"type\":\"不稼働\", \"name\":\"定休\", \"month\":\"*\", \"day\":\"*\", \"dow\":\"日,土\"}";
 
 	public static Result calendarList() {
-		return ok(index.render(カレンダ年.$find.all()));
+		return ok(index.render(CalendarYear.$find.all()));
 	}
 
 	public static Result viewInputForm() {
@@ -50,8 +50,8 @@ public class CalendarRestFacade extends Controller {
 		String ownerName = param.get("ownerName");
 		String rel = param.get("rel");
 
-		所有者 owner = 所有者.$find.where().eq("name", ownerName).findUnique();
-		Date ret = カレンダDomainUtil.getNextWorkingDate(owner, Integer.parseInt(rel));
+		Owner owner = Owner.$find.where().eq("name", ownerName).findUnique();
+		Date ret = CalendarDomainUtil.getNextWorkingDate(owner, Integer.parseInt(rel));
 		return ok(ret.toString());
 	}
 
@@ -67,7 +67,7 @@ public class CalendarRestFacade extends Controller {
 		System.out.println("checkbox=" + holiday);
 		System.out.println("ownerRule=" + ownerRule);
 
-		所有者 owner = new 所有者(ownerName);
+		Owner owner = new Owner(ownerName);
 		owner.save();
 
 		String json ="";
@@ -85,10 +85,10 @@ public class CalendarRestFacade extends Controller {
 			json = "[" + ownerRule + "]";
 			System.out.println("in3");
 		}
-		休日 holiDay = new 休日(json);
+		Holiday holiDay = new Holiday(json);
 		holiDay.save();
 
-		カレンダ年 cal = new カレンダ年(owner, Integer.parseInt(year));
+		CalendarYear cal = new CalendarYear(owner, Integer.parseInt(year));
 		cal.applyHoliDay(holiDay);
 		//TODO 特定日ができたら特定日の適用も必要となってくる
 		cal.save();
@@ -98,19 +98,19 @@ public class CalendarRestFacade extends Controller {
 	}
 
 	public static Result viewCalendar(Long calId) {
-		カレンダ年 target = カレンダ年.$find.byId(calId);
-		MonthView m1 = new MonthView(target, 月.M1);
-		MonthView m2 = new MonthView(target, 月.M2);
-		MonthView m3 = new MonthView(target, 月.M3);
-		MonthView m4 = new MonthView(target, 月.M4);
-		MonthView m5 = new MonthView(target, 月.M5);
-		MonthView m6 = new MonthView(target, 月.M6);
-		MonthView m7 = new MonthView(target, 月.M7);
-		MonthView m8 = new MonthView(target, 月.M8);
-		MonthView m9 = new MonthView(target, 月.M9);
-		MonthView m10 = new MonthView(target, 月.M10);
-		MonthView m11 = new MonthView(target, 月.M11);
-		MonthView m12 = new MonthView(target, 月.M12);
+		CalendarYear target = CalendarYear.$find.byId(calId);
+		MonthView m1 = new MonthView(target, Month.M1);
+		MonthView m2 = new MonthView(target, Month.M2);
+		MonthView m3 = new MonthView(target, Month.M3);
+		MonthView m4 = new MonthView(target, Month.M4);
+		MonthView m5 = new MonthView(target, Month.M5);
+		MonthView m6 = new MonthView(target, Month.M6);
+		MonthView m7 = new MonthView(target, Month.M7);
+		MonthView m8 = new MonthView(target, Month.M8);
+		MonthView m9 = new MonthView(target, Month.M9);
+		MonthView m10 = new MonthView(target, Month.M10);
+		MonthView m11 = new MonthView(target, Month.M11);
+		MonthView m12 = new MonthView(target, Month.M12);
 		List<MonthView> yearCalendar = new ArrayList<MonthView>();
 		yearCalendar.add(m1);
 		yearCalendar.add(m2);

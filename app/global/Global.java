@@ -2,9 +2,9 @@ package global;
 
 import java.io.IOException;
 
-import models.calendar.カレンダ年;
-import models.calendar.休日;
-import models.party.所有者;
+import models.calendar.CalendarYear;
+import models.calendar.Holiday;
+import models.party.Owner;
 
 import org.apache.commons.io.FileUtils;
 
@@ -56,14 +56,14 @@ public class Global extends GlobalSettings {
 	}
 
 	private void make日本の祝日カレンダ() {
-		所有者 owner = new 所有者("日本の祝日");
+		Owner owner = new Owner("日本の祝日");
 		owner.save();
 
 		String json = "[" + 日本の祝日 + "]";
-		休日 holiDay = new 休日(json);
+		Holiday holiDay = new Holiday(json);
 		holiDay.save();
 
-		カレンダ年 cal2014 = new カレンダ年(owner, 2014);
+		CalendarYear cal2014 = new CalendarYear(owner, 2014);
 		cal2014.applyHoliDay(holiDay);
 		//TODO 特定日ができたら特定日の適用も必要となってくる
 		cal2014.save();
@@ -72,15 +72,15 @@ public class Global extends GlobalSettings {
 	}
 
 	private void make日本のカレンダ() {
-		所有者 owner = new 所有者("日本の休日");
+		Owner owner = new Owner("日本の休日");
 		owner.save();
 
 		String json = "[" + 定休 + "," + 日本の祝日 + "]";
 //		String json = "[" + 日本の祝日 + "," + 定休 + "]";
-		休日 holiDay = new 休日(json);
+		Holiday holiDay = new Holiday(json);
 		holiDay.save();
 
-		カレンダ年 cal2014 = new カレンダ年(owner, 2014);
+		CalendarYear cal2014 = new CalendarYear(owner, 2014);
 		cal2014.applyHoliDay(holiDay);
 		//TODO 特定日ができたら特定日の適用も必要となってくる
 		cal2014.save();
@@ -89,14 +89,14 @@ public class Global extends GlobalSettings {
 	}
 
 	private void make森木家カレンダ() {
-		所有者 owner = new 所有者("森木家");
+		Owner owner = new Owner("森木家");
 		owner.save();
 
 		String json = "[" + 定休 + "," + 日本の祝日 +  ","  +  森木 + "]";
-		休日 holiDay = new 休日(json);
+		Holiday holiDay = new Holiday(json);
 		holiDay.save();
 
-		カレンダ年 cal2014 = new カレンダ年(owner, 2014);
+		CalendarYear cal2014 = new CalendarYear(owner, 2014);
 		cal2014.applyHoliDay(holiDay);
 		//TODO 特定日ができたら特定日の適用も必要となってくる
 		cal2014.save();
@@ -105,14 +105,14 @@ public class Global extends GlobalSettings {
 	}
 
 	private void makeISKENカレンダ() {
-		所有者 owner = new 所有者("ISKEN");
+		Owner owner = new Owner("ISKEN");
 		owner.save();
 
 		String json = "[" + 定休 + "," + 日本の祝日 +  ","  +  ISKEN + "]";
-		休日 holiDay = new 休日(json);
+		Holiday holiDay = new Holiday(json);
 		holiDay.save();
 
-		カレンダ年 cal2014 = new カレンダ年(owner, 2014);
+		CalendarYear cal2014 = new CalendarYear(owner, 2014);
 		cal2014.applyHoliDay(holiDay);
 		//TODO 特定日ができたら特定日の適用も必要となってくる
 		cal2014.save();
