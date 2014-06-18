@@ -80,9 +80,9 @@ public class CalendarYear extends Model {
 			cal.add(Calendar.DATE, -1);
 			int lastDay = cal.get(Calendar.DATE);
 
-			System.out.println("Month" + (i+1));
-			System.out.println("DoW" + startDoW);
-			System.out.println("lastDay" + lastDay);
+//			System.out.println("Month" + (i+1));
+//			System.out.println("DoW" + startDoW);
+//			System.out.println("lastDay" + lastDay);
 
 			for(int j=1; j<=lastDay; j++) {
 				int k = startDoW + j - 1;
@@ -156,34 +156,48 @@ public class CalendarYear extends Model {
 		return counter;
 	}
 
-	public Date getNextWorkingDay(int month, int day) {
-		CalendarDayIndex calIndex = CalendarDayIndex.$find.where().eq("year", this).eq("month", month).eq("day", day).findUnique();
-		int startIndex = calIndex.index;
+//	public Date getNextWorkingDay(Month month, Day day) {
+//		CalendarDayIndex calIndex = CalendarDayIndex.$find.where().eq("year", this).eq("month", month).eq("day", day).findUnique();
+//		int startIndex = calIndex.index;
+//
+//		//TODO kesu
+//		System.out.println("startIndex" + startIndex);
 
-		//TODO kesu
-		System.out.println("startIndex" + startIndex);
+//		dayList = CalendarDay.$find.where().eq("year", this).findList();
 
-		dayList = CalendarDay.$find.where().eq("year", this).findList();
+//		CalendarDay targetDay = dayList.get(index);
+
 
 		//this.refresh();
 		//System.out.println("size" + dayList.size());
 		//TODO dayList.size()が機能しない。Playの問題？ 365を暫定的
-		for(int index=startIndex; index<=dayList.size(); index++ ) {
-			CalendarDay targetDay = dayList.get(index);
+//		for(int index=startIndex; index<=dayList.size(); index++ ) {
+//			CalendarDay targetDay = dayList.get(index);
+//
+//			//TODO kesu
+//			System.out.println("index" + index);
+//			System.out.println("month" + targetDay.month.getNumber());
+//			System.out.println("day" + targetDay.day.getNumber());
+//
+//			if( targetDay.isWorkingDay() ) {
+//				return targetDay.getTime();
+//			}
+//		}
 
-			//TODO kesu
-			System.out.println("index" + index);
-			System.out.println("month" + targetDay.month.getNumber());
-			System.out.println("day" + targetDay.day.getNumber());
-
-			if( targetDay.isWorkingDay() ) {
-				return targetDay.getTime();
-			}
-		}
-		//Next稼働日なし
-		//TODO Next稼働日なしのときの処理
-		return null;
-	}
+//		boolean flag = true;
+//		CalendarDay targetDay = CalendarDay.$find.where().eq("year", this).eq("month", month).eq("day", day).findUnique();
+//		while(flag) {
+//			//Next稼働日なし
+//			//TODO Next稼働日なしのときの処理
+//			if( targetDay == null ) {
+//				return null;
+//			}
+//			flag = targetDay.isHoliday();
+//			targetDay = targetDay.
+//		}
+//
+//		return null;
+//	}
 
 	public Date getPrevWorkingDay(int rel) {
 		// TODO 自動生成されたメソッド・スタブ

@@ -80,4 +80,5 @@ public class CalendarDay extends Model {
 		cal.set(year.year, month.getNumber(), day.getNumber());
 		return cal.getTime();
 	}
+
 }

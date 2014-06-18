@@ -64,8 +64,8 @@ public class CalendarRestFacade extends Controller {
 		String holiday = param.get("holiday");
 		String ownerRule = param.get("ownerRule");
 
-		System.out.println("checkbox=" + holiday);
-		System.out.println("ownerRule=" + ownerRule);
+//		System.out.println("checkbox=" + holiday);
+//		System.out.println("ownerRule=" + ownerRule);
 
 		Owner owner = new Owner(ownerName);
 		owner.save();

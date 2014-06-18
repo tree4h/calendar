@@ -16,8 +16,8 @@ import play.GlobalSettings;
 public class Global extends GlobalSettings {
 	@Override
 	public void onStart(Application app) {
-		super.onStart(app);
-		createDb(app);
+		//super.onStart(app);
+		//createDb(app);　//PostgreSQLを使うと、dropDdlがうまく動作せず、createDdlでエラーとなってしまう
 		this.InitialDataInsert();
 	}
 
