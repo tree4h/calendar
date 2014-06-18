@@ -18,7 +18,7 @@ public class Global extends GlobalSettings {
 	public void onStart(Application app) {
 		//super.onStart(app);
 		//createDb(app);　//PostgreSQLを使うと、dropDdlがうまく動作せず、createDdlでエラーとなってしまう
-		this.InitialDataInsert();
+		//this.InitialDataInsert();
 	}
 
 	private void createDb(Application app) {
