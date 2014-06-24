@@ -36,14 +36,14 @@ td.japanhol {
 	color: #FF4F02;
 }
 
-/* 会社の休日の文字色 aqua*/
+/* 会社の休日の文字色 緑*/
 td.comhol {
-	color: #00FFFF;
+	color: #00FF00;
 }
 
-/* 休出の文字色 黄*/
+/* 休出の文字色 紫*/
 td.comwork {
-	color: #FFFF00;
+	color: #FF00FF;
 }
 
 /* 日曜日の文字色 赤*/
@@ -53,5 +53,5 @@ td.sun {
 
 /* 土曜日の文字色 青*/
 td.sat {
-	color: #0000cd;
+	color: #0000FF;
 }

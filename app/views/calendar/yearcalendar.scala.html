@@ -1,4 +1,4 @@
-@(title : String)(yearcalendar : List[models.view.MonthView])
+@(title : String)(yearcalendar : List[models.view.MonthView])(mode : Int)
 
 @main("カレンダ一覧") {
 	<ul class="breadcrumb">
@@ -7,49 +7,58 @@
 	</ul>
 
  	<link rel="stylesheet" media="screen" href="@routes.Assets.at("css/calendar.css")">
+		<div class="row">
+			<div class="col-md-12">
+				<span>表示モード：</span>
+				<a href="@routes.CalendarRestFacade.viewCalendar(1, 0)">数名</a>
+				<a href="@routes.CalendarRestFacade.viewCalendar(1, 1)">和名</a>
+				<a href="@routes.CalendarRestFacade.viewCalendar(1, 2)">英名</a>
+			</div>
+		</div>
+		<br>
 
 		<div class="row">
 			<div class="col-md-3">
-				@monthcalendar(yearcalendar.get(0))
+				@monthcalendar(yearcalendar.get(0), mode)
 			</div>
 			<div class="col-md-3">
-				@monthcalendar(yearcalendar.get(1))
+				@monthcalendar(yearcalendar.get(1), mode)
 			</div>
 			<div class="col-md-3">
-				@monthcalendar(yearcalendar.get(2))
+				@monthcalendar(yearcalendar.get(2), mode)
 			</div>
 			<div class="col-md-3">
-				@monthcalendar(yearcalendar.get(3))
-			</div>
-		</div>
-		</br>
-		<div class="row">
-			<div class="col-md-3">
-				@monthcalendar(yearcalendar.get(4))
-			</div>
-			<div class="col-md-3">
-				@monthcalendar(yearcalendar.get(5))
-			</div>
-			<div class="col-md-3">
-				@monthcalendar(yearcalendar.get(6))
-			</div>
-			<div class="col-md-3">
-				@monthcalendar(yearcalendar.get(7))
+				@monthcalendar(yearcalendar.get(3), mode)
 			</div>
 		</div>
 		</br>
 		<div class="row">
 			<div class="col-md-3">
-				@monthcalendar(yearcalendar.get(8))
+				@monthcalendar(yearcalendar.get(4), mode)
 			</div>
 			<div class="col-md-3">
-				@monthcalendar(yearcalendar.get(9))
+				@monthcalendar(yearcalendar.get(5), mode)
 			</div>
 			<div class="col-md-3">
-				@monthcalendar(yearcalendar.get(10))
+				@monthcalendar(yearcalendar.get(6), mode)
 			</div>
 			<div class="col-md-3">
-				@monthcalendar(yearcalendar.get(11))
+				@monthcalendar(yearcalendar.get(7), mode)
+			</div>
+		</div>
+		</br>
+		<div class="row">
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(8), mode)
+			</div>
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(9), mode)
+			</div>
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(10), mode)
+			</div>
+			<div class="col-md-3">
+				@monthcalendar(yearcalendar.get(11), mode)
 			</div>
 		</div>
 }

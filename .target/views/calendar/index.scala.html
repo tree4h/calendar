@@ -1,4 +1,4 @@
-@(calendars : List[models.calendar.カレンダ年])
+@(calendars : List[models.calendar.CalendarYear])
 
 @main("カレンダ一覧") {
 	<ul class="breadcrumb">
@@ -6,10 +6,11 @@
 	</ul>
 
 	<a class="btn" href="@routes.CalendarRestFacade.viewInputForm()">新規</a>
+	<a class="btn" href="@routes.CalendarRestFacade.initialiseCalendar()">初期化(※工事中)</a>
 	<br>
 	<ul>
 	@for(cal <- calendars) {
-		<li><a href="@routes.CalendarRestFacade.viewCalendar(cal.id)">@cal.owner.name _ @cal.year</a></li>
+		<li><a href="@routes.CalendarRestFacade.viewCalendar(cal.id, 0)">@cal.owner.name _ @cal.year</a></li>
 	}
 	</ul>
 }

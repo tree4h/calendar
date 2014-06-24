@@ -5,9 +5,11 @@
 # Home page
 GET	/			controllers.Application.index()
 GET	/calendarlist		controllers.CalendarRestFacade.calendarList()
-GET	/calendar/:id		controllers.CalendarRestFacade.viewCalendar(id: Long)
+GET	/calendar/:id~:mode		controllers.CalendarRestFacade.viewCalendar(id: Long, mode: Int)
 GET	/calendar		controllers.CalendarRestFacade.viewInputForm()
 POST	/calendar		controllers.CalendarRestFacade.createCalendar()
+
+GET	/initialcalendar		controllers.CalendarRestFacade.initialiseCalendar()
 
 GET	/calendarapi		controllers.CalendarRestFacade.calendarAPIList()
 GET	/calendarapi/api1input		controllers.CalendarRestFacade.viewAPI1InputForm()

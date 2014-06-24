@@ -1,17 +1,43 @@
-@(cal : models.view.MonthView)
+@(cal : models.view.MonthView, mode : Int)
 @import models.view.DayView
 
 <table>
-	<caption>@cal.month.get英名()</caption>
-	<tr class="dow">
-		<td width="30" class="sun">日</td>
-		<td width="30">月</td>
-		<td width="30">火</td>
-		<td width="30">水</td>
-		<td width="30">木</td>
-		<td width="30">金</td>
-		<td width="30" class="sat">土</td>
-	</tr>
+	@if(mode == 0) {
+		<caption>@cal.month.get数名()</caption>
+		<tr class="dow">
+			<td width="40" class="sun">日</td>
+			<td width="40">月</td>
+			<td width="40">火</td>
+			<td width="40">水</td>
+			<td width="40">木</td>
+			<td width="40">金</td>
+			<td width="40" class="sat">土</td>
+		</tr>
+	}
+	@if(mode == 1) {
+		<caption>@cal.month.get和名()</caption>
+		<tr class="dow">
+			<td width="40" class="sun">日</td>
+			<td width="40">月</td>
+			<td width="40">火</td>
+			<td width="40">水</td>
+			<td width="40">木</td>
+			<td width="40">金</td>
+			<td width="40" class="sat">土</td>
+		</tr>
+	}
+	@if(mode == 2) {
+		<caption>@cal.month.get英名()</caption>
+		<tr class="dow">
+			<td width="40" class="sun">SUN</td>
+			<td width="40">MON</td>
+			<td width="40">TUE</td>
+			<td width="40">WED</td>
+			<td width="40">THU</td>
+			<td width="40">FRI</td>
+			<td width="40" class="sat">STA</td>
+		</tr>
+	}
 	@for(i <- 1 to 6) {
 		<tr>
 		@for(j <- 1 to 7) {

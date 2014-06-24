@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import models.calendar.CalendarYear;
 import models.calendar.Holiday;
+import models.calendar.Year;
 import models.party.Owner;
 
 import org.apache.commons.io.FileUtils;
@@ -17,8 +18,9 @@ public class Global extends GlobalSettings {
 	@Override
 	public void onStart(Application app) {
 		//super.onStart(app);
-		//createDb(app);　//PostgreSQLを使うと、dropDdlがうまく動作せず、createDdlでエラーとなってしまう
-		//this.InitialDataInsert();
+		//PostgreSQLを使うと、dropDdlがうまく動作せず、createDdlでエラーとなってしまう
+		createDb(app);
+		this.InitialDataInsert();
 	}
 
 	private void createDb(Application app) {
@@ -43,81 +45,58 @@ public class Global extends GlobalSettings {
 		Ebean.execute(Ebean.createCallableSql(createDdl));
 	}
 
-	private final String 日本の祝日 = "{\"type\":\"祝日\", \"name\":\"元旦\", \"month\":\"M1\", \"day\":\"D1\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"成人の日\", \"month\":\"M1\", \"day\":\"D8-D14\", \"dow\":\"月\"},{\"type\":\"祝日\", \"name\":\"建国記念の日\", \"month\":\"M2\", \"day\":\"D11\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"春分の日\", \"month\":\"M3\", \"day\":\"D21\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"昭和の日\", \"month\":\"M4\", \"day\":\"D29\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"憲法記念日\", \"month\":\"M5\", \"day\":\"D3\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"みどりの日\", \"month\":\"M5\", \"day\":\"D4\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"こどもの日\", \"month\":\"M5\", \"day\":\"D5\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"海の日\", \"month\":\"M7\", \"day\":\"D15-D21\", \"dow\":\"月\"},{\"type\":\"祝日\", \"name\":\"敬老の日\", \"month\":\"M9\", \"day\":\"D15-D21\", \"dow\":\"月\"},{\"type\":\"祝日\", \"name\":\"秋分の日\", \"month\":\"M9\", \"day\":\"D23\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"体育の日\", \"month\":\"M10\", \"day\":\"D8-D14\", \"dow\":\"月\"},{\"type\":\"祝日\", \"name\":\"文化の日\", \"month\":\"M11\", \"day\":\"D3\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"勤労感謝の日\", \"month\":\"M11\", \"day\":\"D23\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"天皇誕生日\", \"month\":\"M12\", \"day\":\"D23\", \"dow\":\"*\"}";
-	private final String 定休 = "{\"type\":\"不稼働\", \"name\":\"定休\", \"month\":\"*\", \"day\":\"*\", \"dow\":\"日,土\"}";
-	private final String 森木 = "{\"type\":\"不稼働\", \"name\":\"結婚記念日\", \"month\":\"M2\", \"day\":\"D29\", \"dow\":\"*\"},{\"type\":\"不稼働\", \"name\":\"さえこの日\", \"month\":\"M3\", \"day\":\"D31\", \"dow\":\"*\"},{\"type\":\"不稼働\", \"name\":\"かいとの日\", \"month\":\"M4\", \"day\":\"D3\", \"dow\":\"*\"},{\"type\":\"不稼働\", \"name\":\"ゆうたの日\", \"month\":\"M5\", \"day\":\"D25\", \"dow\":\"*\"},{\"type\":\"不稼働\", \"name\":\"ひろしの日\", \"month\":\"M10\", \"day\":\"D25\", \"dow\":\"*\"}";
-	private final String ISKEN = "{\"type\":\"不稼働\", \"name\":\"三が日\", \"month\":\"M1\", \"day\":\"D1-D3\", \"dow\":\"*\"},{\"type\":\"不稼働\", \"name\":\"年末\", \"month\":\"M12\", \"day\":\"D29-D31\", \"dow\":\"*\"},{\"type\":\"不稼働\", \"name\":\"定例会\", \"month\":\"*\", \"day\":\"D22-D28\", \"dow\":\"金\"},{\"type\":\"不稼働\", \"name\":\"創立記念日\", \"month\":\"M11\", \"day\":\"D1\", \"dow\":\"*\"},{\"type\":\"休出\", \"name\":\"成人の日\", \"month\":\"M1\", \"day\":\"D8-D14\", \"dow\":\"月\"}";
+	private static final String 日本の祝日 = "{\"type\":\"祝日\", \"name\":\"元旦\", \"month\":\"M1\", \"day\":\"D1\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"成人の日\", \"month\":\"M1\", \"day\":\"D8-D14\", \"dow\":\"月\"},{\"type\":\"祝日\", \"name\":\"建国記念の日\", \"month\":\"M2\", \"day\":\"D11\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"春分の日\", \"month\":\"M3\", \"day\":\"D21\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"昭和の日\", \"month\":\"M4\", \"day\":\"D29\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"憲法記念日\", \"month\":\"M5\", \"day\":\"D3\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"みどりの日\", \"month\":\"M5\", \"day\":\"D4\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"こどもの日\", \"month\":\"M5\", \"day\":\"D5\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"海の日\", \"month\":\"M7\", \"day\":\"D15-D21\", \"dow\":\"月\"},{\"type\":\"祝日\", \"name\":\"敬老の日\", \"month\":\"M9\", \"day\":\"D15-D21\", \"dow\":\"月\"},{\"type\":\"祝日\", \"name\":\"秋分の日\", \"month\":\"M9\", \"day\":\"D23\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"体育の日\", \"month\":\"M10\", \"day\":\"D8-D14\", \"dow\":\"月\"},{\"type\":\"祝日\", \"name\":\"文化の日\", \"month\":\"M11\", \"day\":\"D3\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"勤労感謝の日\", \"month\":\"M11\", \"day\":\"D23\", \"dow\":\"*\"},{\"type\":\"祝日\", \"name\":\"天皇誕生日\", \"month\":\"M12\", \"day\":\"D23\", \"dow\":\"*\"}";
+	private static final String 定休 = "{\"type\":\"不稼働\", \"name\":\"定休\", \"month\":\"*\", \"day\":\"*\", \"dow\":\"日,土\"}";
+	private static final String ISKEN = "{\"type\":\"不稼働\", \"name\":\"三が日\", \"month\":\"M1\", \"day\":\"D1-D3\", \"dow\":\"*\"},{\"type\":\"不稼働\", \"name\":\"年末\", \"month\":\"M12\", \"day\":\"D29-D31\", \"dow\":\"*\"},{\"type\":\"不稼働\", \"name\":\"定例会\", \"month\":\"*\", \"day\":\"D22-D28\", \"dow\":\"金\"},{\"type\":\"不稼働\", \"name\":\"創立記念日\", \"month\":\"M11\", \"day\":\"D1\", \"dow\":\"*\"},{\"type\":\"休出\", \"name\":\"成人の日\", \"month\":\"M1\", \"day\":\"D8-D14\", \"dow\":\"月\"}";
 
 	private void InitialDataInsert() {
-		this.make日本の祝日カレンダ();
-		this.make日本のカレンダ();
-		this.make森木家カレンダ();
-		this.makeISKENカレンダ();
+		Owner japan1 = new Owner("日本の祝日");
+		japan1.save();
+		Owner japan2 = new Owner("日本の休日");
+		japan2.save();
+		Owner isken = new Owner("ISKEN");
+		isken.save();
+
+		make日本の祝日カレンダ(japan1, Year.Y14);
+		make日本のカレンダ(japan2, Year.Y14);
+
+		makeISKENカレンダ(isken, Year.Y14);
+		makeISKENカレンダ(isken, Year.Y15);
 	}
 
-	private void make日本の祝日カレンダ() {
-		Owner owner = new Owner("日本の祝日");
-		owner.save();
-
+	public static void make日本の祝日カレンダ(Owner owner, Year year) {
 		String json = "[" + 日本の祝日 + "]";
 		Holiday holiDay = new Holiday(json);
 		holiDay.save();
 
-		CalendarYear cal2014 = new CalendarYear(owner, 2014);
-		cal2014.applyHoliDay(holiDay);
-		//TODO 特定日ができたら特定日の適用も必要となってくる
-		cal2014.save();
+		CalendarYear calYear = new CalendarYear(owner, year);
+		calYear.applyHoliDay(holiDay);
+		calYear.saveCalendar();
 
-		cal2014.printCalendar();
+//		calYear.printCalendar();
 	}
 
-	private void make日本のカレンダ() {
-		Owner owner = new Owner("日本の休日");
-		owner.save();
-
+	public static void make日本のカレンダ(Owner owner, Year year) {
 		String json = "[" + 定休 + "," + 日本の祝日 + "]";
 //		String json = "[" + 日本の祝日 + "," + 定休 + "]";
 		Holiday holiDay = new Holiday(json);
 		holiDay.save();
 
-		CalendarYear cal2014 = new CalendarYear(owner, 2014);
-		cal2014.applyHoliDay(holiDay);
-		//TODO 特定日ができたら特定日の適用も必要となってくる
-		cal2014.save();
-
-//		cal2014.printCalendar();
+		CalendarYear calYear = new CalendarYear(owner, year);
+		calYear.applyHoliDay(holiDay);
+		calYear.saveCalendar();
 	}
 
-	private void make森木家カレンダ() {
-		Owner owner = new Owner("森木家");
-		owner.save();
-
-		String json = "[" + 定休 + "," + 日本の祝日 +  ","  +  森木 + "]";
-		Holiday holiDay = new Holiday(json);
-		holiDay.save();
-
-		CalendarYear cal2014 = new CalendarYear(owner, 2014);
-		cal2014.applyHoliDay(holiDay);
-		//TODO 特定日ができたら特定日の適用も必要となってくる
-		cal2014.save();
-
-//		cal2014.printCalendar();
-	}
-
-	private void makeISKENカレンダ() {
-		Owner owner = new Owner("ISKEN");
-		owner.save();
-
+	public static void makeISKENカレンダ(Owner owner, Year year) {
 		String json = "[" + 定休 + "," + 日本の祝日 +  ","  +  ISKEN + "]";
 		Holiday holiDay = new Holiday(json);
 		holiDay.save();
 
-		CalendarYear cal2014 = new CalendarYear(owner, 2014);
-		cal2014.applyHoliDay(holiDay);
-		//TODO 特定日ができたら特定日の適用も必要となってくる
-		cal2014.save();
+		CalendarYear calYear = new CalendarYear(owner, year);
+		calYear.applyHoliDay(holiDay);
+		calYear.saveCalendar();
 
-//		cal2014.printCalendar();
+		calYear.printCalendar();
 	}
 
 }

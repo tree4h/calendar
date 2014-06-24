@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import models.calendar.CalendarDomainUtil;
 import models.calendar.CalendarYear;
 import models.calendar.Holiday;
 import models.calendar.Month;
+import models.calendar.Year;
 import models.party.Owner;
 import models.view.MonthView;
 import play.data.DynamicForm;
@@ -50,8 +52,7 @@ public class CalendarRestFacade extends Controller {
 		String ownerName = param.get("ownerName");
 		String rel = param.get("rel");
 
-		Owner owner = Owner.$find.where().eq("name", ownerName).findUnique();
-		Date ret = CalendarDomainUtil.getNextWorkingDate(owner, Integer.parseInt(rel));
+		Date ret = CalendarDomainUtil.getNextWorkingDate(ownerName, Integer.parseInt(rel));
 		return ok(ret.toString());
 	}
 
@@ -60,44 +61,45 @@ public class CalendarRestFacade extends Controller {
 		DynamicForm input = Form.form().bindFromRequest();
 		Map<String, String> param = input.data();
 		String ownerName = param.get("owner");
-		String year = param.get("year");
+		String yearNumber = param.get("year");
 		String holiday = param.get("holiday");
 		String ownerRule = param.get("ownerRule");
 
 //		System.out.println("checkbox=" + holiday);
 //		System.out.println("ownerRule=" + ownerRule);
 
-		Owner owner = new Owner(ownerName);
-		owner.save();
+		Owner owner = Owner.$find.where().eq("name", ownerName).findUnique();
+		if(owner == null) {
+			owner = new Owner(ownerName);
+			owner.save();
+		}
 
 		String json ="";
 		if(holiday.equals("on")) {
 			if(ownerRule.startsWith("{")) {
 				json = "[" + 定休 + "," + 日本の祝日 +  ","  +  ownerRule + "]";
-				System.out.println("in2");
 			}
 			else {
 				json = "[" + 定休 + "," + 日本の祝日 + "]";
-				System.out.println("in1");
 			}
 		}
 		else {
 			json = "[" + ownerRule + "]";
-			System.out.println("in3");
 		}
 		Holiday holiDay = new Holiday(json);
 		holiDay.save();
 
-		CalendarYear cal = new CalendarYear(owner, Integer.parseInt(year));
-		cal.applyHoliDay(holiDay);
-		//TODO 特定日ができたら特定日の適用も必要となってくる
-		cal.save();
-//		cal.printCalendar();
+		Year year = Year.get年(Integer.parseInt(yearNumber));
+		CalendarYear calYear = new CalendarYear(owner, year);
+		calYear.applyHoliDay(holiDay);
+		calYear.saveCalendar();
+
+		calYear.printCalendar();
 
 		return redirect(controllers.routes.CalendarRestFacade.calendarList());
 	}
 
-	public static Result viewCalendar(Long calId) {
+	public static Result viewCalendar(Long calId, int mode) {
 		CalendarYear target = CalendarYear.$find.byId(calId);
 		MonthView m1 = new MonthView(target, Month.M1);
 		MonthView m2 = new MonthView(target, Month.M2);
@@ -125,7 +127,127 @@ public class CalendarRestFacade extends Controller {
 		yearCalendar.add(m11);
 		yearCalendar.add(m12);
 		String title = target.owner.name + "_" + target.year;
-		return ok(yearcalendar.render(title, yearCalendar));
+		return ok(yearcalendar.render(title, yearCalendar, mode));
+	}
+
+	//test
+	//2014/1/1 - 2014/1/1 -> 1day
+	private static final Date start1 = getDate(2014, 0, 1);
+	private static final Date end1 = getDate(2014, 0, 1);
+	//2014/1/1 - 2014/1/2 -> 2day
+	private static final Date start2 = getDate(2014, 0, 1);
+	private static final Date end2 = getDate(2014, 0, 2);
+	//2014/1/1 - 2014/1/10 -> 10day
+	private static final Date start3 = getDate(2014, 0, 1);
+	private static final Date end3 = getDate(2014, 0, 10);
+	//2014/1/1 - 2014/2/19 -> 50day
+	private static final Date start4 = getDate(2014, 0, 1);
+	private static final Date end4 = getDate(2014, 1, 19);
+	//2014/1/1 - 2014/4/10 -> 100day
+	private static final Date start5 = getDate(2014, 0, 1);
+	private static final Date end5 = getDate(2014, 3, 10);
+	//2014/1/1 - 2014/7/19 -> 200day
+	private static final Date start6 = getDate(2014, 0, 1);
+	private static final Date end6 = getDate(2014, 6, 19);
+	//2014/1/1 - 2015/2/4 -> 400day
+	private static final Date start7 = getDate(2014, 0, 1);
+	private static final Date end7 = getDate(2015, 1, 4);
+
+	private static Date getDate(int year, int month, int date) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(year, month, date);
+		return cal.getTime();
+	}
+
+	public static Result initialiseCalendar() {
+		//性能測定
+		System.out.println( "============================================");
+		int loopsize = 10000;
+		//手法1
+		long start = System.currentTimeMillis();
+		int ret11 = CalendarDomainUtil.howManyDaysBetween(start1, end1);
+		for(int i=1; i<loopsize; i++) {
+			CalendarDomainUtil.howManyDaysBetween(start1, end1);
+		}
+		long end = System.currentTimeMillis();
+		System.out.println("ret11 = "+ret11);
+		System.out.println("ret11.time = " + (end-start) + "ms");
+
+		start = System.currentTimeMillis();
+		int ret17 = CalendarDomainUtil.howManyDaysBetween(start7, end7);
+		for(int i=1; i<loopsize; i++) {
+			CalendarDomainUtil.howManyDaysBetween(start7, end7);
+		}
+		end = System.currentTimeMillis();
+		System.out.println("ret17 = "+ret17);
+		System.out.println("ret17.time = " + (end-start) + "ms");
+
+		//手法1-稼働日数
+		Owner owner = Owner.$find.where().eq("name", "ISKEN").findUnique();
+		start = System.currentTimeMillis();
+		int retW11 = CalendarDomainUtil.howManyWorkingDaysBetween(owner, start1, end1);
+		for(int i=1; i<loopsize; i++) {
+			CalendarDomainUtil.howManyWorkingDaysBetween(owner, start1, end1);
+		}
+		end = System.currentTimeMillis();
+		System.out.println("retW11 = "+retW11);
+		System.out.println("retW11.time = " + (end-start) + "ms");
+
+		start = System.currentTimeMillis();
+		int retW17 = CalendarDomainUtil.howManyWorkingDaysBetween(owner, start7, end7);
+		for(int i=1; i<loopsize; i++) {
+			CalendarDomainUtil.howManyWorkingDaysBetween(owner, start7, end7);
+		}
+		end = System.currentTimeMillis();
+		System.out.println("retW17 = "+retW17);
+		System.out.println("retW17.time = " + (end-start) + "ms");
+
+		//手法2
+		start = System.currentTimeMillis();
+		int ret21 = CalendarDomainUtil.howManyDaysBetween2(start1, end1);
+		for(int i=1; i<loopsize; i++) {
+			CalendarDomainUtil.howManyDaysBetween2(start1, end1);
+		}
+		end = System.currentTimeMillis();
+		System.out.println("ret21 = "+ret21);
+		System.out.println("ret21.time = " + (end-start) + "ms");
+
+		start = System.currentTimeMillis();
+		int ret27 = CalendarDomainUtil.howManyDaysBetween2(start7, end7);
+		for(int i=1; i<loopsize; i++) {
+			CalendarDomainUtil.howManyDaysBetween2(start7, end7);
+		}
+		end = System.currentTimeMillis();
+		System.out.println("ret27 = "+ret27);
+		System.out.println("ret27.time = " + (end-start) + "ms");
+
+		//手法3
+		start = System.currentTimeMillis();
+		int ret31 = CalendarDomainUtil.howManyDaysBetween3(start1, end1);
+		end = System.currentTimeMillis();
+		System.out.println("ret31 = "+ret31);
+		System.out.println("ret31.time = " + (end-start) + "ms");
+
+		start = System.currentTimeMillis();
+		int ret37 = CalendarDomainUtil.howManyDaysBetween3(start7, end7);
+		end = System.currentTimeMillis();
+		System.out.println("ret37 = "+ret37);
+		System.out.println("ret37.time = " + (end-start) + "ms");
+
+		//手法3-稼働日数
+		start = System.currentTimeMillis();
+		int retW31 = CalendarDomainUtil.howManyWorkingDaysBetween3(owner, start1, end1);
+		end = System.currentTimeMillis();
+		System.out.println("retW31 = "+retW31);
+		System.out.println("retW31.time = " + (end-start) + "ms");
+
+		start = System.currentTimeMillis();
+		int retW37 = CalendarDomainUtil.howManyWorkingDaysBetween3(owner, start7, end7);
+		end = System.currentTimeMillis();
+		System.out.println("retW37 = "+retW37);
+		System.out.println("retW37.time = " + (end-start) + "ms");
+
+		return redirect(controllers.routes.CalendarRestFacade.calendarList());
 	}
 
 }
