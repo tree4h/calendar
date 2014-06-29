@@ -18,7 +18,7 @@ create table calendar_day (
   is_holiday                boolean not null,
   is_working_day            boolean not null,
   _week                     integer,
-  constraint ck_calendar_day_year check (year in (0,1,2,3,4,5,6,7)),
+  constraint ck_calendar_day_year check (year in (0,1,2,3,4,5,6,7,8)),
   constraint ck_calendar_day_month check (month in (0,1,2,3,4,5,6,7,8,9,10,11)),
   constraint ck_calendar_day_day check (day in (0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)),
   constraint ck_calendar_day_dow check (dow in (0,1,2,3,4,5,6)),
@@ -32,7 +32,7 @@ create table calendar_year (
   year                      integer not null,
   owner_id                  bigint not null,
   working_days              integer not null,
-  constraint ck_calendar_year_year check (year in (0,1,2,3,4,5,6,7)),
+  constraint ck_calendar_year_year check (year in (0,1,2,3,4,5,6,7,8)),
   constraint uq_calendar_year_1 unique (owner_id,year),
   constraint pk_calendar_year primary key (id))
 ;

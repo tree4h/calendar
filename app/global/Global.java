@@ -57,11 +57,11 @@ public class Global extends GlobalSettings {
 		Owner isken = new Owner("ISKEN");
 		isken.save();
 
-		make日本の祝日カレンダ(japan1, Year.Y14);
-		make日本のカレンダ(japan2, Year.Y14);
+		make日本の祝日カレンダ(japan1, Year.Y2014);
+		make日本のカレンダ(japan2, Year.Y2014);
 
-		makeISKENカレンダ(isken, Year.Y14);
-		makeISKENカレンダ(isken, Year.Y15);
+		makeISKENカレンダ(isken, Year.Y2014);
+		makeISKENカレンダ(isken, Year.Y2015);
 	}
 
 	public static void make日本の祝日カレンダ(Owner owner, Year year) {
