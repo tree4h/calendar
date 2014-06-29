@@ -43,21 +43,8 @@ public enum Month {
 	}
 
 	public static Month get月(int number) {
-		switch (number) {
-			case 0 : return Month.M1;
-			case 1 : return Month.M2;
-			case 2 : return Month.M3;
-			case 3 : return Month.M4;
-			case 4 : return Month.M5;
-			case 5 : return Month.M6;
-			case 6 : return Month.M7;
-			case 7 : return Month.M8;
-			case 8 : return Month.M9;
-			case 9 : return Month.M10;
-			case 10 : return Month.M11;
-			case 11 : return Month.M12;
-		}
-		return null;
+		String name = "M" + Integer.toString(number+1);
+		return Month.valueOf(name);
 	}
 
 
